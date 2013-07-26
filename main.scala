@@ -2,19 +2,19 @@ import java.io._
 
  object slist {
  	//flags to be set from command line arguments
- 	var list_parameter_ = false
- 	var all_parameter_ = false
+ 	var long_format_param_ = false
+ 	var all_param_ = false
  	var path_ = new File(".").getCanonicalPath
 
  	/** Handles user interaction such as parameters. */
     def main(args: Array[String]) {
     	for (argument <- args){
             if (argument startsWith("--")) argument match {
-                case "--list" => list_parameter_ = true
-                case "--all" => all_parameter_ = true
+                case "--list" => long_format_param_ = true
+                case "--all" => all_param_ = true
             } else if (argument.head == '-') for (letter_option <- argument.tail) letter_option match {
-    			case 'l'  => list_parameter_ = true
-    			case 'a' => all_parameter_ = true
+    			case 'l'  => long_format_param_ = true
+    			case 'a' => all_param_ = true
     		}
     		/* if it doesn't start with a '-' character then it otherwise must be the path, so we see if it's 
     		 * at the end of the arguments, in the correct spot */
@@ -28,9 +28,9 @@ import java.io._
       */
     def printFileItem(item: File)
     {
-    	if (!item.isHidden || all_parameter_) {
+    	if (!item.isHidden || all_param_) {
 	    	if (item.isDirectory) {
-	    		list_parameter_ match {
+	    		long_format_param_ match {
 	    			case false => print(item.getName + " ")
 	    			case true => println("d" + 
 	    				{if (item.canRead) "r" else "-"} + 
@@ -39,7 +39,7 @@ import java.io._
 	    				"\t" + item.getName)
 	    		}
 	    	} else if (item.isFile) {
-	    		list_parameter_ match {
+	    		long_format_param_ match {
 	    			case false => print(item.getName + " ")
 	    			case true => println("-" + 
 	    				{if (item.canRead) "r" else "-"} + 
@@ -59,7 +59,7 @@ import java.io._
     		var currentDirectory = new File(path)
 
     		for (f <- currentDirectory.listFiles()) printFileItem(f)
-    		if (!list_parameter_) println() //print a newline for formatting when each file doesn't get it's own line
+    		if (!long_format_param_) println() //print a newline for formatting when each file doesn't get it's own line
     	} catch {
     		case _: NullPointerException => println("\"" + path_ + "\" is an invalid path")
     	}
