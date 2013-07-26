@@ -1,10 +1,12 @@
 import java.io._
+import scala.collection.mutable.ListBuffer
 
  object slist {
  	//flags to be set from command line arguments
  	var long_format_param_ = false
  	var all_param_ = false
     var recurse_param_ = false
+    var sort_param_ = true
 
  	var path_ = new File(".").getCanonicalPath
 
@@ -18,6 +20,7 @@ import java.io._
     			case 'l'  => long_format_param_ = true
     			case 'a' => all_param_ = true
                 case 'R' => recurse_param_ = true
+                case 'f' => sort_param_ = false
     		}
     		/* if it doesn't start with a '-' character then it otherwise must be the path, so we see if it's 
     		 * at the end of the arguments, in the correct spot */
@@ -61,7 +64,15 @@ import java.io._
     	try {
     		var currentDirectory = new File(path)
 
-    		for (f <- currentDirectory.listFiles()) {
+            var filesList : ListBuffer[File] = ListBuffer()
+            for (f <- currentDirectory listFiles){
+                filesList += f
+            }
+
+            //TODO: find out if Java lists files alphabetically anyway
+            if (sort_param_) filesList.sortWith(_.getName.toLowerCase < _.getName.toLowerCase)
+
+    		for (f <- filesList) {
                 printFileItem(f, depth)
                 if (recurse_param_ && f.isDirectory) list(f getPath, depth + 1)
             }
