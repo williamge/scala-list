@@ -18,13 +18,30 @@ import java.io._
       list(path_)
     }
 
+    def printFileItem(item: File)
+    {
+    	if (!item.isHidden()){
+	    	if (item.isDirectory()) {
+	    		list_parameter_ match {
+	    			case false => print(item.getName() + " ")
+	    			case true => println("\td\t" + item)
+	    		}
+	    	} else if (item.isFile()){
+	    		list_parameter_ match {
+	    			case false => print(item.getName() + " ")
+	    			case true => println("\tf\t" + item)
+	    		}
+	    	}
+	    }
+    		
+    }
+
     def list(path: String) {
     	try {
     		var currentDirectory = new File(path)
-    		for (f <- currentDirectory.listFiles()){
-    			if (f.isDirectory()) println("\td\t" + f)
-    			else if (f.isFile()) println("\tf\t" + f)
-    		}
+
+    		for (f <- currentDirectory.listFiles()) printFileItem(f)
+    		if (!list_parameter_) println()
     	} catch {
     		case _: NullPointerException => println("\"" + path_ + "\" is an invalid path")
     	}
