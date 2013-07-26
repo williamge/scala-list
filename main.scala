@@ -7,6 +7,7 @@ import scala.collection.mutable.ListBuffer
  	var all_param_ = false
     var recurse_param_ = false
     var sort_param_ = true
+    var sort_mod_param_ = false //flag for sorting by modification time
 
  	var path_ = new File(".").getCanonicalPath
 
@@ -21,6 +22,7 @@ import scala.collection.mutable.ListBuffer
     			case 'a' => all_param_ = true
                 case 'R' => recurse_param_ = true
                 case 'f' => sort_param_ = false
+                case 't' => sort_mod_param_ = true
     		}
     		/* if it doesn't start with a '-' character then it otherwise must be the path, so we see if it's 
     		 * at the end of the arguments, in the correct spot */
@@ -70,7 +72,11 @@ import scala.collection.mutable.ListBuffer
             }
 
             //TODO: find out if Java lists files alphabetically anyway
-            if (sort_param_) filesList.sortWith(_.getName.toLowerCase < _.getName.toLowerCase)
+            if (sort_param_ && !sort_mod_param_) {
+                filesList = filesList.sortWith(_.getName.toLowerCase < _.getName.toLowerCase)
+            } else if (sort_mod_param_) {
+                filesList = filesList.sortWith(_.lastModified < _.lastModified)
+            }
 
     		for (f <- filesList) {
                 printFileItem(f, depth)
