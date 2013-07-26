@@ -9,11 +9,11 @@ import java.io._
     def main(args: Array[String]) {
     	for (argument <- args){
     		if (argument.head == '-') argument match {
-    			case "-l" | "--list" => {list_parameter_ = true}
-    			case "-a" | "--all" => {all_parameter_ = true}
+    			case "-l" | "--list" => list_parameter_ = true
+    			case "-a" | "--all" => all_parameter_ = true
     		}
     		//if it doesn't start with a '-' character then it otherwise must be the path, so we see if it's at the end of the arguments, in the correct spot
-    		else if ((args indexOf argument) == args.length - 1) {path_ = argument}
+    		else if ((args indexOf argument) == args.length - 1) path_ = argument
     	}
       list(path_)
     }
