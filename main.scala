@@ -38,28 +38,17 @@ import scala.collection.mutable.ListBuffer
     def printFileItem(item: File, depth: Int = 0)
     {
     	if (!item.isHidden || all_param_) {
-	    	if (item.isDirectory) {
-	    		long_format_param_ match {
-	    			case false => print(item.getName + " ")
-	    			case true => println("d" + 
-	    				{if (item.canRead) "r" else "-"} + 
-	    				{if (item.canWrite) "w" else "-"} + 
-	    				{if (item.canExecute) "x" else "-"} +
-	    				"\t" + "\t" * depth + item.getName)
-	    		}
-	    	} else if (item.isFile) {
-	    		long_format_param_ match {
-	    			case false => print(item.getName + " ")
-	    			case true => println("-" + 
-	    				{if (item.canRead) "r" else "-"} + 
-	    				{if (item.canWrite) "w" else "-"} + 
-	    				{if (item.canExecute) "x" else "-"} +
-	    				"\t" + "\t" * depth + item.getName)
-	    		}
-	    	}
-	    }
-    		
+    		long_format_param_ match {
+    			case false => print(item.getName + " ")
+    			case true => println( {if (item.isDirectory) "d" else "-"} + 
+    				{if (item.canRead) "r" else "-"} + 
+    				{if (item.canWrite) "w" else "-"} + 
+    				{if (item.canExecute) "x" else "-"} +
+    				"\t" + "\t" * depth + item.getName)
+    		}
+	    }		
     }
+    
     /** Handles the listing logic for each query.
       * @param path path to be listed
       * @param depth depth in the directory tree for path
