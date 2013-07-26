@@ -24,12 +24,20 @@ import java.io._
 	    	if (item.isDirectory()) {
 	    		list_parameter_ match {
 	    			case false => print(item.getName() + " ")
-	    			case true => println("\td\t" + item)
+	    			case true => println("d" + 
+	    				{if (item.canRead()) "r" else "-"} + 
+	    				{if (item.canWrite()) "w" else "-"} + 
+	    				{if (item.canExecute()) "x" else "-"} +
+	    				"\t" + item.getName())
 	    		}
 	    	} else if (item.isFile()) {
 	    		list_parameter_ match {
 	    			case false => print(item.getName() + " ")
-	    			case true => println("\tf\t" + item)
+	    			case true => println("-" + 
+	    				{if (item.canRead()) "r" else "-"} + 
+	    				{if (item.canWrite()) "w" else "-"} + 
+	    				{if (item.canExecute()) "x" else "-"} +
+	    				"\t" + item.getName())
 	    		}
 	    	}
 	    }
