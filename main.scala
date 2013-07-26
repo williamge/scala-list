@@ -33,6 +33,7 @@ import scala.collection.mutable.ListBuffer
 
     /** Prints a given file according to formatting parameters.
       * @param item item to be listed 
+      * @param depth depth in the directory tree for item
       */
     def printFileItem(item: File, depth: Int = 0)
     {
@@ -61,6 +62,7 @@ import scala.collection.mutable.ListBuffer
     }
     /** Handles the listing logic for each query.
       * @param path path to be listed
+      * @param depth depth in the directory tree for path
    	  */
     def list(path: String, depth: Int = 0) {
     	try {
