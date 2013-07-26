@@ -24,7 +24,9 @@ import java.io._
     		for (f <- currentDirectory.listFiles()){
     			if (f.isDirectory()) println("\td\t" + f)
     			else if (f.isFile()) println("\tf\t" + f)
-    		} 
+    		}
+    	} catch {
+    		case _: NullPointerException => println("\"" + path_ + "\" is an invalid path")
     	}
     }
   }
