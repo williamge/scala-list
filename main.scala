@@ -3,10 +3,10 @@ import scala.collection.mutable.ListBuffer
 
  object slist {
  	//flags to be set from command line arguments
- 	var long_format_param_ = false
- 	var all_param_ = false
-    var recurse_param_ = false
-    var sort_param_ = true
+ 	var long_format_param_ = false //long form list formatting
+ 	var all_param_ = false //display all, even hidden
+    var recurse_param_ = false //resursively list directories
+    var sort_param_ = true //sort files list before display
     var sort_mod_param_ = false //flag for sorting by modification time
 
  	var path_ = new File(".").getCanonicalPath
@@ -15,7 +15,7 @@ import scala.collection.mutable.ListBuffer
     def main(args: Array[String]) {
     	for (argument <- args){
             if (argument startsWith("--")) argument match {
-                case "--list" => long_format_param_ = true
+                case "--long" => long_format_param_ = true
                 case "--all" => all_param_ = true
             } else if (argument.head == '-') for (letter_option <- argument.tail) letter_option match {
     			case 'l'  => long_format_param_ = true
