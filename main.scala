@@ -20,13 +20,13 @@ import java.io._
 
     def printFileItem(item: File)
     {
-    	if (!item.isHidden()){
+    	if (!item.isHidden() || all_parameter_) {
 	    	if (item.isDirectory()) {
 	    		list_parameter_ match {
 	    			case false => print(item.getName() + " ")
 	    			case true => println("\td\t" + item)
 	    		}
-	    	} else if (item.isFile()){
+	    	} else if (item.isFile()) {
 	    		list_parameter_ match {
 	    			case false => print(item.getName() + " ")
 	    			case true => println("\tf\t" + item)
