@@ -1,4 +1,6 @@
 import java.io._
+import java.nio._
+import java.nio.file._
 import java.util.Date
 import scala.collection.mutable.ListBuffer
 
@@ -36,18 +38,18 @@ import scala.collection.mutable.ListBuffer
       * @param item item to be listed 
       * @param depth depth in the directory tree for item
       */
-    def printFileItem(item: File, depth: Int = 0)
+    def printFileItem(item: Path, depth: Int = 0)
     {
-    	if (!item.isHidden || all_param_) {
+    	if (!Files.isHidden(item) || all_param_) {
     		long_format_param_ match {
-    			case false => print(item.getName + " ")
-    			case true => println( {if (item.isDirectory) "d" else "-"} + 
-    				{if (item.canRead) "r" else "-"} + 
-    				{if (item.canWrite) "w" else "-"} + 
-    				{if (item.canExecute) "x" else "-"} + 
-    				"\t" + item.length + 
-                    "\t" + (new Date(item.lastModified)).toString() + 
-                    " " + "\t" * depth + item.getName)
+    			case false => print(item.getFileName.toString + " ")
+    			case true => println( {if (Files.isDirectory(item)) "d" else "-"} + 
+    				{if (Files.isReadable(item)) "r" else "-"} + 
+    				{if (Files.isWritable(item)) "w" else "-"} + 
+    				{if (Files.isExecutable(item)) "x" else "-"} + 
+    				"\t" + Files.size(item) + 
+                    "\t" + (new Date(Files.getLastModifiedTime(item).toMillis)).toString() + 
+                    " " + "\t" * depth + item.getFileName.toString)
     		}
 	    }		
     }
@@ -58,23 +60,24 @@ import scala.collection.mutable.ListBuffer
    	  */
     def list(path: String, depth: Int = 0) {
     	try {
-    		var currentDirectory = new File(path)
+    		var currentDirectory = Files.newDirectoryStream(Paths.get("."))
+            val dirIt = currentDirectory.iterator
 
-            var filesList : ListBuffer[File] = ListBuffer()
-            for (f <- currentDirectory listFiles){
-                filesList += f
+            var filesList : ListBuffer[Path] = ListBuffer()
+            while (dirIt hasNext){
+                filesList += dirIt.next()
             }
 
             //TODO: find out if Java lists files alphabetically anyway
             if (sort_param_ && !sort_mod_param_) {
-                filesList = filesList.sortWith(_.getName.toLowerCase < _.getName.toLowerCase)
+                filesList = filesList.sortWith(_.getFileName.toString.toLowerCase < _.getFileName.toString.toLowerCase)
             } else if (sort_mod_param_) {
-                filesList = filesList.sortWith(_.lastModified < _.lastModified)
+                filesList = filesList.sortWith(Files.getLastModifiedTime(_).toMillis < Files.getLastModifiedTime(_).toMillis)
             }
 
-    		for (f <- filesList) {
-                printFileItem(f, depth)
-                if (recurse_param_ && f.isDirectory) list(f getPath, depth + 1)
+    		for (p <- filesList) {
+                printFileItem(p, depth)
+                if (recurse_param_ && Files.isDirectory(p)) list(p.toString, depth + 1)
             }
     		if (!long_format_param_) println() //print a newline for formatting when each file doesn't get it's own line
     	} catch {
