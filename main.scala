@@ -28,24 +28,24 @@ import java.io._
       */
     def printFileItem(item: File)
     {
-    	if (!item.isHidden() || all_parameter_) {
-	    	if (item.isDirectory()) {
+    	if (!item.isHidden || all_parameter_) {
+	    	if (item.isDirectory) {
 	    		list_parameter_ match {
-	    			case false => print(item.getName() + " ")
+	    			case false => print(item.getName + " ")
 	    			case true => println("d" + 
-	    				{if (item.canRead()) "r" else "-"} + 
-	    				{if (item.canWrite()) "w" else "-"} + 
-	    				{if (item.canExecute()) "x" else "-"} +
-	    				"\t" + item.getName())
+	    				{if (item.canRead) "r" else "-"} + 
+	    				{if (item.canWrite) "w" else "-"} + 
+	    				{if (item.canExecute) "x" else "-"} +
+	    				"\t" + item.getName)
 	    		}
-	    	} else if (item.isFile()) {
+	    	} else if (item.isFile) {
 	    		list_parameter_ match {
-	    			case false => print(item.getName() + " ")
+	    			case false => print(item.getName + " ")
 	    			case true => println("-" + 
-	    				{if (item.canRead()) "r" else "-"} + 
-	    				{if (item.canWrite()) "w" else "-"} + 
-	    				{if (item.canExecute()) "x" else "-"} +
-	    				"\t" + item.getName())
+	    				{if (item.canRead) "r" else "-"} + 
+	    				{if (item.canWrite) "w" else "-"} + 
+	    				{if (item.canExecute) "x" else "-"} +
+	    				"\t" + item.getName)
 	    		}
 	    	}
 	    }
