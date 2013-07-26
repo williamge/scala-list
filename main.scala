@@ -1,4 +1,5 @@
 import java.io._
+import java.util.Date
 import scala.collection.mutable.ListBuffer
 
  object slist {
@@ -43,12 +44,14 @@ import scala.collection.mutable.ListBuffer
     			case true => println( {if (item.isDirectory) "d" else "-"} + 
     				{if (item.canRead) "r" else "-"} + 
     				{if (item.canWrite) "w" else "-"} + 
-    				{if (item.canExecute) "x" else "-"} +
-    				"\t" + "\t" * depth + item.getName)
+    				{if (item.canExecute) "x" else "-"} + 
+    				"\t" + item.length + 
+                    "\t" + (new Date(item.lastModified)).toString() + 
+                    " " + "\t" * depth + item.getName)
     		}
 	    }		
     }
-    
+
     /** Handles the listing logic for each query.
       * @param path path to be listed
       * @param depth depth in the directory tree for path
