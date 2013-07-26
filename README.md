@@ -1,4 +1,4 @@
 scala-list
 ==========
 
-A simple reimplementation of a 'ls'-esque program made in Scala
+A simple implementation of a 'ls'-esque program made in Scala
