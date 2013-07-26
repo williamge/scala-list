@@ -9,9 +9,12 @@ import java.io._
  	/** Handles user interaction such as parameters. */
     def main(args: Array[String]) {
     	for (argument <- args){
-    		if (argument.head == '-') argument match {
-    			case "-l" | "--list" => list_parameter_ = true
-    			case "-a" | "--all" => all_parameter_ = true
+            if (argument startsWith("--")) argument match {
+                case "--list" => list_parameter_ = true
+                case "--all" => all_parameter_ = true
+            } else if (argument.head == '-') for (letter_option <- argument.tail) letter_option match {
+    			case 'l'  => list_parameter_ = true
+    			case 'a' => all_parameter_ = true
     		}
     		/* if it doesn't start with a '-' character then it otherwise must be the path, so we see if it's 
     		 * at the end of the arguments, in the correct spot */
