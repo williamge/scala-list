@@ -70,9 +70,11 @@ import scala.collection.mutable.ListBuffer
 
             //TODO: find out if Java lists files alphabetically anyway
             if (sort_param_ && !sort_mod_param_) {
-                filesList = filesList.sortWith(_.getFileName.toString.toLowerCase < _.getFileName.toString.toLowerCase)
+                filesList = filesList.sortWith(
+                    _.getFileName.toString.toLowerCase < _.getFileName.toString.toLowerCase)
             } else if (sort_mod_param_) {
-                filesList = filesList.sortWith(Files.getLastModifiedTime(_).toMillis < Files.getLastModifiedTime(_).toMillis)
+                filesList = filesList.sortWith(
+                    Files.getLastModifiedTime(_).toMillis < Files.getLastModifiedTime(_).toMillis)
             }
 
     		for (p <- filesList) {
