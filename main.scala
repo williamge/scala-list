@@ -40,16 +40,34 @@ import scala.collection.mutable.ListBuffer
       */
     def printFileItem(item: Path, depth: Int = 0)
     {
+
+        def containsPermission(permissions: Set[attribute.PosixFilePermission], value: String): Boolean = {
+            permissions.contains(attribute.PosixFilePermission.valueOf(value))
+        }
+
     	if (!Files.isHidden(item) || all_param_) {
     		long_format_param_ match {
     			case false => print(item.getFileName.toString + " ")
-    			case true => println( {if (Files.isDirectory(item)) "d" else "-"} + 
-    				{if (Files.isReadable(item)) "r" else "-"} + 
-    				{if (Files.isWritable(item)) "w" else "-"} + 
-    				{if (Files.isExecutable(item)) "x" else "-"} + 
-    				"\t" + Files.size(item) + 
-                    "\t" + (new Date(Files.getLastModifiedTime(item).toMillis)).toString() + 
-                    " " + "\t" * depth + item.getFileName.toString)
+    			case true => {
+                    val permissions = Files.getPosixFilePermissions(item)
+                    def containsPermission(value: String): Boolean = { //just a helper function to make it more readable
+                        permissions.contains(attribute.PosixFilePermission.valueOf(value))
+                    }
+
+                    println( {if (Files.isDirectory(item)) "d" else "-"} + 
+                        {if (containsPermission("OWNER_READ")) "r" else "-" } + 
+                        {if (containsPermission("OWNER_WRITE")) "w" else "-" } + 
+                        {if (containsPermission("OWNER_EXECUTE")) "x" else "-" } + 
+                        {if (containsPermission("GROUP_READ") )"r" else "-" } + 
+                        {if (containsPermission("GROUP_WRITE") )"w" else "-" } + 
+                        {if (containsPermission("GROUP_EXECUTE")) "x" else "-" } + 
+                        {if (containsPermission("OTHERS_READ") )"r" else "-" } + 
+                        {if (containsPermission("OTHERS_WRITE") )"w" else "-" } + 
+                        {if (containsPermission("OTHERS_EXECUTE")) "x" else "-" } + 
+        				"\t" + Files.size(item) + 
+                        "\t" + (new Date(Files.getLastModifiedTime(item).toMillis)).toString() + 
+                        " " + "\t" * depth + item.getFileName.toString)
+                }
     		}
 	    }		
     }
