@@ -11,6 +11,7 @@ import scala.collection.mutable.ListBuffer
     var recurse_param_ = false //resursively list directories
     var sort_param_ = true //sort files list before display
     var sort_mod_param_ = false //flag for sorting by modification time
+    var reverse_sort_param_ = false //reverses each sorting
 
  	var path_ = new File(".").getCanonicalPath
 
@@ -26,6 +27,7 @@ import scala.collection.mutable.ListBuffer
                 case 'R' => recurse_param_ = true
                 case 'f' => sort_param_ = false
                 case 't' => sort_mod_param_ = true
+                case 'r' => reverse_sort_param_ = true
     		}
     		/* if it doesn't start with a '-' character then it otherwise must be the path, so we see if it's 
     		 * at the end of the arguments, in the correct spot */
@@ -94,6 +96,8 @@ import scala.collection.mutable.ListBuffer
                 filesList = filesList.sortWith(
                     Files.getLastModifiedTime(_).toMillis < Files.getLastModifiedTime(_).toMillis)
             }
+
+            if (reverse_sort_param_) filesList = filesList.reverse
 
     		for (p <- filesList) {
                 printFileItem(p, depth)
