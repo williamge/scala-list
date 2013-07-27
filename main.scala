@@ -12,6 +12,7 @@ import scala.collection.mutable.ListBuffer
     var sort_param_ = true //sort files list before display
     var sort_mod_param_ = false //flag for sorting by modification time
     var reverse_sort_param_ = false //reverses each sorting
+    var sort_size_param_ = false //sort list by size
 
  	var path_ = new File(".").getCanonicalPath
 
@@ -28,6 +29,7 @@ import scala.collection.mutable.ListBuffer
                 case 'f' => sort_param_ = false
                 case 't' => sort_mod_param_ = true
                 case 'r' => reverse_sort_param_ = true
+                case 'S' => sort_size_param_ = true
     		}
     		/* if it doesn't start with a '-' character then it otherwise must be the path, so we see if it's 
     		 * at the end of the arguments, in the correct spot */
@@ -89,12 +91,15 @@ import scala.collection.mutable.ListBuffer
             }
 
             //TODO: find out if Java lists files alphabetically anyway
-            if (sort_param_ && !sort_mod_param_) {
+            if (sort_param_ && !(sort_mod_param_ || sort_size_param_)) {
                 filesList = filesList.sortWith(
                     _.getFileName.toString.toLowerCase < _.getFileName.toString.toLowerCase)
             } else if (sort_mod_param_) {
                 filesList = filesList.sortWith(
                     Files.getLastModifiedTime(_).toMillis < Files.getLastModifiedTime(_).toMillis)
+            } else if (sort_size_param_) {
+                filesList = filesList.sortWith(
+                    Files.size(_) < Files.size(_))
             }
 
             if (reverse_sort_param_) filesList = filesList.reverse
