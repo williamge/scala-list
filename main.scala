@@ -70,7 +70,7 @@ import scala.collection.mutable.ListBuffer
                         {if (containsPermission("OTHERS_EXECUTE")) "x" else "-" } + 
         				"\t" + Files.size(item) + 
                         "\t" + (new Date(Files.getLastModifiedTime(item).toMillis)).toString() + 
-                        " " + "\t" * depth + item.getFileName.toString)
+                        "\t" + "\t" * depth + item.getFileName.toString)
                 }
     		}
 	    }		
@@ -82,7 +82,7 @@ import scala.collection.mutable.ListBuffer
    	  */
     def list(path: String, depth: Int = 0) {
     	try {
-    		var currentDirectory = Files.newDirectoryStream(Paths.get("."))
+    		var currentDirectory = Files.newDirectoryStream(Paths.get(path))
             val dirIt = currentDirectory.iterator
 
             var filesList : ListBuffer[Path] = ListBuffer()
@@ -106,7 +106,7 @@ import scala.collection.mutable.ListBuffer
 
     		for (p <- filesList) {
                 printFileItem(p, depth)
-                if (recurse_param_ && Files.isDirectory(p)) list(p.toString, depth + 1)
+                if (recurse_param_ && Files.isDirectory(p) && !(Files.isHidden(p) && !all_param_)) list(p.toString, depth + 1)
             }
     		if (!long_format_param_) println() //print a newline for formatting when each file doesn't get it's own line
     	} catch {
